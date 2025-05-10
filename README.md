@@ -24,10 +24,7 @@ This is a demonstration project built with Express.js.
 
 ```bash
 # Clone with HTTPS
-git clone https://github.com/username/express-demo.git
-
-# Clone with SSH
-git clone git@github.com:username/express-demo.git
+git clone https://github.com/Vuong1411/express-demo.git
 
 # Navigate to project directory
 cd express-demo
