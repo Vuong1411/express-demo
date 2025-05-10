@@ -7,12 +7,20 @@ This is a demonstration project built with Express.js.
 ## Screenshots
 
 ### Home Page
-![Home Page](./public/img/home.png)
+![Page](./public/img/home.png)
 
-### Search chi tiết
-![Dashboard](./public/img/search1.png)
-### Search nhiều người
-![Dashboard](./public/img/search2.png)
+### Search page
+![Page](./public/img/search1.png)
+
+![Page](./public/img/search2.png)
+
+![Page](./public/img/search3.png)
+
+### Code
+![Code](./public/img/code-home.png)
+![Code](./public/img/code-search1.png)
+![Code](./public/img/code-search2.png)
+![Code](./public/img/code-search3.png)
 
 ## Getting Started
 
@@ -64,7 +72,3 @@ Your application should now be running on [http://localhost:3000](http://localho
    ├── app.js          # Application entry point
    └── README.md
 ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
