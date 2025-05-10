@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả tìm kiếm - Social Media Web</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 40px;
+        }
+
+        .main-content {
+            margin-top: 20px;
+        }
+
+        .post {
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .user-card {
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .section-divider {
+            border-top: 1px solid #dee2e6;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="https://cdn.pixabay.com/photo/2017/06/22/14/23/twitter-2430933_640.png" alt="Logo"
+                    class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Form Search -->
+                <form class="d-flex mx-auto" action="/search" method="GET">
+                    <div class="input-group" style="width: 450px;">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="search" name="q" class="form-control border-start-0 border-end-0"
+                            placeholder="Tìm kiếm..." aria-label="Search" value="<%= query %>">
+                        <button class="btn btn-primary rounded-end-pill" type="submit">
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </form>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="bi bi-house-fill"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile"><i class="bi bi-person-fill"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="POST">
+                            <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right"></i>
+                                Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Kết quả tìm kiếm: "<%= query %>"</h1>
+            </div>
+
+            <!-- Kết quả tìm kiếm người dùng -->
+            <h2>Người dùng <span class="badge bg-primary"><%= users.length %></span></h2>
+            <% if (users.length > 0) { %>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+                    <% users.forEach(user => { %>
+                        <div class="col">
+                            <div class="card h-100 shadow-sm user-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <img src="<%= user.avatar_url || 'https://via.placeholder.com/64' %>" 
+                                             alt="<%= user.username %>" 
+                                             class="rounded-circle me-3" 
+                                             style="width: 64px; height: 64px; object-fit: cover;">
+                                        <div>
+                                            <h5 class="card-title mb-1"><%= user.username %></h5>
+                                            <p class="card-text text-muted"><small>
+                                                Tham gia: <%= new Date(user.created_at).toLocaleDateString() %>
+                                            </small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <a href="/profile/<%= user.id %>" class="btn btn-outline-primary w-100">
+                                        <i class="bi bi-person-badge me-1"></i> Xem hồ sơ
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Không tìm thấy người dùng nào phù hợp với "<%= query %>".
+                </div>
+            <% } %>
+
+            <div class="section-divider"></div>
+
+            <!-- Kết quả tìm kiếm bài đăng -->
+            <h2>Bài đăng <span class="badge bg-primary"><%= posts.length %></span></h2>
+            <% if (posts.length > 0) { %>
+                <div class="posts-container">
+                    <% posts.forEach(post => { %>
+                        <div class="post">
+                            <div class="post-header d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="<%= post.avatar_url || 'https://via.placeholder.com/40' %>" 
+                                         alt="<%= post.username %>" 
+                                         class="rounded-circle me-2" 
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                    <div class="post-meta">
+                                        <h5 class="mb-0"><%= post.username %></h5>
+                                        <small class="text-muted">
+                                            <%= new Date(post.created_at).toLocaleDateString() %>, 
+                                            <%= new Date(post.created_at).toLocaleTimeString() %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Post Content -->
+                            <div class="post-content mt-3">
+                                <p><%= post.body %></p>
+                            </div>
+
+                            <!-- Post Image (if available) -->
+                            <% if (post.image_url) { %>
+                                <div class="post-image mt-2">
+                                    <img src="<%= post.image_url %>" alt="Post Image" class="img-fluid rounded">
+                                </div>
+                            <% } %>
+
+                            <!-- Interactions -->
+                            <div class="post-interactions mt-3 d-flex justify-content-between align-items-center">
+                                <div class="interactions-left">
+                                    <button class="btn btn-sm btn-outline-secondary like-btn" data-post-id="<%= post.id %>">
+                                        <i class="bi bi-hand-thumbs-up"></i> Thích (<span class="like-count" data-post-id="<%= post.id %>"><%= post.likes %></span>)
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="collapse" 
+                                            data-bs-target="#comments-<%= post.id %>" aria-expanded="false">
+                                        <i class="bi bi-chat"></i> Bình luận (<%= post.comments || 0 %>)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Comments Section -->
+                            <div class="collapse mt-3" id="comments-<%= post.id %>">
+                                <div class="comments-container">
+                                    <% if (post.comments_data && post.comments_data.length > 0) { %>
+                                        <% post.comments_data.forEach(comment => { %>
+                                            <div class="comment d-flex mb-2">
+                                                <img src="<%= comment.avatar_url || 'https://via.placeholder.com/32' %>" 
+                                                     alt="<%= comment.username %>" 
+                                                     class="rounded-circle me-2" 
+                                                     style="width: 32px; height: 32px; object-fit: cover;">
+                                                <div class="comment-content p-2 bg-light rounded">
+                                                    <div class="d-flex justify-content-between">
+                                                        <h6 class="mb-1"><%= comment.username %></h6>
+                                                        <small class="text-muted">
+                                                            <%= new Date(comment.created_at).toLocaleDateString() %>
+                                                        </small>
+                                                    </div>
+                                                    <p class="mb-0"><%= comment.content %></p>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <p class="text-muted">Chưa có bình luận nào.</p>
+                                    <% } %>
+
+                                    <!-- Comment Form -->
+                                    <div class="comment-form mt-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control comment-input-field" 
+                                                  data-post-id="<%= post.id %>" 
+                                                  placeholder="Viết bình luận của bạn...">
+                                            <button class="btn btn-primary submit-comment" data-post-id="<%= post.id %>">
+                                                <i class="bi bi-send"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Không tìm thấy bài đăng nào phù hợp với "<%= query %>".
+                </div>
+            <% } %>
+
+            <% if (users.length === 0 && posts.length === 0) { %>
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Trở về trang chủ
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript for Like/Comment Interactions -->
+    <script>
+        // Like button handler
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-post-id');
+                try {
+                    const response = await fetch(`/like/${postId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        const likeCount = document.querySelector(`.like-count[data-post-id="${postId}"]`);
+                        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                    }
+                } catch (error) {
+                    console.error('Error liking post:', error);
+                }
+            });
+        });
+
+        // Comment submission handler
+        document.querySelectorAll('.submit-comment').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-post-id');
+                const input = document.querySelector(`.comment-input-field[data-post-id="${postId}"]`);
+                const content = input.value.trim();
+                if (!content) return;
+                try {
+                    const response = await fetch(`/comment/${postId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        // Reload page to show new comment
+                        location.reload();
+                    }
+                } catch (error) {
+                    console.error('Error posting comment:', error);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
